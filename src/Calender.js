@@ -7,8 +7,7 @@ class Calendar extends Component {
     super(props);
 
     this.state = {
-      month: this.props.selected.clone(),
-      selected: this.props.selected.clone()
+      month: this.props.selected.clone()
     };
   }
 
@@ -25,7 +24,6 @@ class Calendar extends Component {
   };
 
   select = day => {
-    console.log("DAY is **", day);
     this.setState({ month: day.date });
     this.forceUpdate();
   };
@@ -48,7 +46,7 @@ class Calendar extends Component {
           date={date.clone()}
           month={this.state.month}
           select={this.select}
-          selected={this.props.selected}
+          selected={this.state.month}
         />
       );
       date.add(1, "w");
@@ -59,8 +57,51 @@ class Calendar extends Component {
     return weeks;
   };
 
+  onMonthChange = (event) => {
+    event.persist();
+    let currentMonth = this.state.month;
+    let diff = +event.target.value - currentMonth.month()
+    currentMonth.add(diff, "M");
+    this.setState({ month: currentMonth });
+  }
+
+  onYearChange = (event) => {
+    event.persist();
+    let currentMonth = this.state.month;
+    let diff = +event.target.value - currentMonth.year()
+    currentMonth.add(diff, "Y");
+    this.setState({ month: currentMonth });
+  }
+
   renderMonthLabel = () => {
-    return <span>{this.state.month.format("MMMM, YYYY")}</span>;
+    // return <span>{this.state.month.format("MMMM, YYYY")}</span>;
+   const months = [
+      "January", "February", "March", "April", "May", "June", "July",
+      "August", "September", "October", "November", "December"
+    ];
+
+    let currentMonth = this.state.month;
+    return (<span><select value={currentMonth.month()} onChange={this.onMonthChange}>
+      {months.map((value, index) => {
+        return(<option key={index} value={index}>{value}</option>);
+      })}
+    </select></span>);
+  };
+
+  renderYearsLabel = () => {
+    let currentMonth = this.state.month;
+    let years = [];
+    let pivot = 1980;
+    while (pivot < 2050) {
+      years.push(pivot);
+      pivot++;
+    }
+
+    return (<span><select value={currentMonth.year()} onChange={this.onYearChange}>
+      {years.map((year, index) => {
+        return (<option key={index} value={year}>{year}</option>);
+      })}
+    </select></span>);
   };
 
   render() {
@@ -69,6 +110,7 @@ class Calendar extends Component {
         <div className="header">
           <i className="fa fa-angle-left" onClick={this.previous} />
           {this.renderMonthLabel()}
+          {this.renderYearsLabel()}
           <i className="fa fa-angle-right" onClick={this.next} />
         </div>
         <DayNames />
