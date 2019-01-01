@@ -50,7 +50,7 @@
 }
 .header > span {
   float: left;
-  width: 100%;
+  /* width: 100%; */
   font-weight: bold;
   text-transform: uppercase;
   box-sizing: border-box;
