@@ -6,8 +6,20 @@ class Calendar extends Component {
   constructor(props) {
     super(props);
 
+    let initialYear = window.location.pathname.split("/")[1];
+    let initialMonth = window.location.pathname.split("/")[2];
+
+    let month = this.props.selected.clone();
+
+    if (initialYear && initialMonth) {
+      let yearDiff = +initialYear - month.year();
+      month.add(yearDiff, "Y");
+      let monthDiff = +initialMonth - month.month();
+      month.add(monthDiff, "M");
+    }
+
     this.state = {
-      month: this.props.selected.clone()
+      month: month
     };
   }
 
@@ -15,12 +27,14 @@ class Calendar extends Component {
     var month = this.state.month;
     month.add(-1, "M");
     this.setState({ month: month });
+    window.history.pushState("", "", `/${month.year()}/${month.month()}`);
   };
 
   next = () => {
     var month = this.state.month;
     month.add(1, "M");
     this.setState({ month: month });
+    window.history.pushState("", "", `/${month.year()}/${month.month()}`);
   };
 
   select = day => {
@@ -62,6 +76,11 @@ class Calendar extends Component {
     let currentMonth = this.state.month;
     let diff = +event.target.value - currentMonth.month();
     currentMonth.add(diff, "M");
+    window.history.pushState(
+      "",
+      "",
+      `/${currentMonth.year()}/${currentMonth.month()}`
+    );
     this.setState({ month: currentMonth });
   };
 
@@ -70,6 +89,11 @@ class Calendar extends Component {
     let currentMonth = this.state.month;
     let diff = +event.target.value - currentMonth.year();
     currentMonth.add(diff, "Y");
+    window.history.pushState(
+      "",
+      "",
+      `/${currentMonth.year()}/${currentMonth.month()}`
+    );
     this.setState({ month: currentMonth });
   };
 
