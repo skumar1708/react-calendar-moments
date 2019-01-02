@@ -23,7 +23,7 @@
 .header {
   float: left;
   width: 100%;
-  background: #2875c7;
+  background: #29bb9c;
   height: 40px;
   color: white;
 }
@@ -104,4 +104,8 @@
 .week.names > span {
   color: #2875c7;
   font-weight: bold;
+}
+
+select {
+  background: #fff;
 }
