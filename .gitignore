@@ -1,4 +1,5 @@
 .DS_Store
+<<<<<<< HEAD
 .idea
 *.iml
 node_modules
@@ -11,3 +12,17 @@ yarn-error.log
 config/local*.json
 .project
 .vscode
+=======
+  .idea
+  *.iml
+node_modules
+build
+  *.log *
+  npm - debug.log
+coverage
+doc
+yarn - error.log
+config / local *.json
+  .project
+  .vscode
+>>>>>>> 8f42db5cfb8ebf3c07bdb2a46412b699ef2ce694

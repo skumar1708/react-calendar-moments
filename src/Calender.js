@@ -6,8 +6,20 @@ class Calendar extends Component {
   constructor(props) {
     super(props);
 
+    let initialYear = window.location.pathname.split("/")[1];
+    let initialMonth = window.location.pathname.split("/")[2];
+
+    let month = this.props.selected.clone();
+
+    if (initialYear && initialMonth) {
+      let yearDiff = +initialYear - month.year();
+      month.add(yearDiff, "Y");
+      let monthDiff = +initialMonth - month.month();
+      month.add(monthDiff, "M");
+    }
+
     this.state = {
-      month: this.props.selected.clone()
+      month: month
     };
   }
 
@@ -15,12 +27,14 @@ class Calendar extends Component {
     var month = this.state.month;
     month.add(-1, "M");
     this.setState({ month: month });
+    window.history.pushState("", "", `/${month.year()}/${month.month()}`);
   };
 
   next = () => {
     var month = this.state.month;
     month.add(1, "M");
     this.setState({ month: month });
+    window.history.pushState("", "", `/${month.year()}/${month.month()}`);
   };
 
   select = day => {
@@ -57,35 +71,63 @@ class Calendar extends Component {
     return weeks;
   };
 
-  onMonthChange = (event) => {
+  onMonthChange = event => {
     event.persist();
     let currentMonth = this.state.month;
-    let diff = +event.target.value - currentMonth.month()
+    let diff = +event.target.value - currentMonth.month();
     currentMonth.add(diff, "M");
+    window.history.pushState(
+      "",
+      "",
+      `/${currentMonth.year()}/${currentMonth.month()}`
+    );
     this.setState({ month: currentMonth });
-  }
+  };
 
-  onYearChange = (event) => {
+  onYearChange = event => {
     event.persist();
     let currentMonth = this.state.month;
-    let diff = +event.target.value - currentMonth.year()
+    let diff = +event.target.value - currentMonth.year();
     currentMonth.add(diff, "Y");
+    window.history.pushState(
+      "",
+      "",
+      `/${currentMonth.year()}/${currentMonth.month()}`
+    );
     this.setState({ month: currentMonth });
-  }
+  };
 
   renderMonthLabel = () => {
     // return <span>{this.state.month.format("MMMM, YYYY")}</span>;
-   const months = [
-      "January", "February", "March", "April", "May", "June", "July",
-      "August", "September", "October", "November", "December"
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
     ];
 
     let currentMonth = this.state.month;
-    return (<span><select value={currentMonth.month()} onChange={this.onMonthChange}>
-      {months.map((value, index) => {
-        return(<option key={index} value={index}>{value}</option>);
-      })}
-    </select></span>);
+    return (
+      <span>
+        <select value={currentMonth.month()} onChange={this.onMonthChange}>
+          {months.map((value, index) => {
+            return (
+              <option key={index} value={index}>
+                {value}
+              </option>
+            );
+          })}
+        </select>
+      </span>
+    );
   };
 
   renderYearsLabel = () => {
@@ -97,11 +139,19 @@ class Calendar extends Component {
       pivot++;
     }
 
-    return (<span><select value={currentMonth.year()} onChange={this.onYearChange}>
-      {years.map((year, index) => {
-        return (<option key={index} value={year}>{year}</option>);
-      })}
-    </select></span>);
+    return (
+      <span>
+        <select value={currentMonth.year()} onChange={this.onYearChange}>
+          {years.map((year, index) => {
+            return (
+              <option key={index} value={year}>
+                {year}
+              </option>
+            );
+          })}
+        </select>
+      </span>
+    );
   };
 
   render() {

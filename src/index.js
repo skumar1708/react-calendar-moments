@@ -6,7 +6,7 @@ import "./styles.css";
 
 function App() {
   return (
-    <div className="App">      
+    <div className="App">
       <div className="calendar">
         <Calender selected={moment()} />
       </div>

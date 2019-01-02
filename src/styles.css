@@ -15,12 +15,15 @@
   background: white;
   width: 300px;
   border: solid 1px #ccc;
-  margin-bottom: 10px;
+  margin: auto;
+  left: 0;
+  right: 0;
+  position: absolute;
 }
 .header {
   float: left;
   width: 100%;
-  background: #2875c7;
+  background: #29bb9c;
   height: 40px;
   color: white;
 }
@@ -101,4 +104,8 @@
 .week.names > span {
   color: #2875c7;
   font-weight: bold;
+}
+
+select {
+  background: #fff;
 }
